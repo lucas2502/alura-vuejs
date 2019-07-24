@@ -16,17 +16,16 @@ export default {
   data () {
     return {
       msg: 'Javascript <3',
-      fotos: [
-        {
-          url: './assets/logo.png',
-          titulo: 'Logo Vue'
-        },
-        {
-          url: './assets/logo.png',
-          titulo: 'Logo Vue'
-        }
-      ]
+      fotos: []
     }
+  },
+
+  created(){
+
+    let promisse = this.$http.get('http://localhost:3000/v1/fotos');
+    promisse
+      .then(res => res.json())
+      .then(fotos => this.fotos = fotos, err => console.log(err));
   }
 }
 </script>
