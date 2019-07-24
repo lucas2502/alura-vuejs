@@ -1,61 +1,67 @@
 <template>
-  <div>
-    <ul>
-      <li v-for="foto of fotos">
-        <img :src="foto.url" :alt="foto.titulo">
+  <div class="corpo">
+
+    <h1 class="centralizado">{{ msg }}</h1>
+
+    <ul class="lista-fotos">
+      <li class="lista-fotos-item" v-for="foto of fotos">
+        <meu-painel :titulo="foto.titulo">
+            <img class="imagem-responsiva" :src="foto.url" :alt="foto.titulo">
+        </meu-painel>
       </li>
     </ul>
 
-    <h1>{{ msg }}</h1>
   </div>
+
 </template>
 
 <script>
+import Painel from './assets/components/shares/painel/painel.vue';
+
 export default {
+  components: {
+    'meu-painel' : Painel
+  },
 
   data () {
     return {
-      msg: 'Javascript <3',
-      fotos: [
-        {
-          url: './assets/logo.png',
-          titulo: 'Logo Vue'
-        },
-        {
-          url: './assets/logo.png',
-          titulo: 'Logo Vue'
-        }
-      ]
+      msg: 'Pictures',
+      fotos: []
     }
+  },
+
+  created(){
+
+    let promisse = this.$http.get('http://localhost:3000/v1/fotos');
+    promisse
+      .then(res => res.json())
+      .then(fotos => this.fotos = fotos, err => console.log(err));
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
-h1, h2 {
-  font-weight: normal;
-}
+.titulo {
+    text-align: center;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  .corpo {
+    font-family: Helvetica, sans-serif;
+    margin: 0 auto;
+    width: 96%;
+  }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+  .lista-fotos {
+    list-style: none;
+  }
 
-a {
-  color: #42b983;
-}
+  .lista-fotos .lista-fotos-item {
+    display: inline-block;
+  }
+
+  .imagem-responsiva {
+    width: 100%;
+  }
+
 </style>
